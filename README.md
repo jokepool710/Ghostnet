@@ -1,38 +1,100 @@
 #VPN Project
 
-A lightweight VPN control panel with a FastAPI backend and a simple browser-based frontend.
-This project is designed as an MVP to demonstrate VPN connection handling, session logging, and a user-friendly interface.
+A lightweight demo VPN control panel with a FastAPI backend and browser-based frontend.
+Built for hackathons and MVP demos.
 
-Features
+ Features
 
- Connect / Disconnect API using FastAPI
+ Connect / Disconnect API endpoints (FastAPI)
+ Simple web control panel (HTML, CSS, JS)
+ SQLite schema for users and activity logs
+ Modular and minimal codebase
 
- Web control panel with HTML, CSS, and JavaScript
-
- SQLite database schema for users and VPN activity logs
-
- Simple, modular codebase for hackathon or MVP demos
-
-Tech Stack
+ Tech Stack
 
 Backend: Python 3.11, FastAPI, Uvicorn
 
 Frontend: HTML, CSS, Vanilla JavaScript
 
-Database: SQLite (lightweight, file-based)
+Database: SQLite
 
-How It Works
+ Project Structure
+vpn-project/
+├── backend/          # FastAPI server
+│   ├── server.py
+│   ├── requirements.txt
+│
+├── frontend/         # Web control panel
+│   ├── index.html
+│   ├── style.css
+│   ├── app.js
+│
+├── db/               # Database schema
+│   ├── schema.sql
+│
+├── .gitignore
+├── README.md
+├── LICENSE
 
-Backend runs a FastAPI server exposing /connect and /disconnect endpoints.
+ Setup & Installation
+1. Clone Repo
+git clone https://github.com/<your-username>/<repo-name>.git
+cd vpn-project
 
-Frontend calls these APIs to simulate VPN control.
+2. Backend Setup
+cd backend
+pip install -r requirements.txt
+python server.py
 
-Database schema supports user accounts and logs activity for future expansion.
+3. Database Setup
+sqlite3 vpn.db < db/schema.sql
 
-Use Cases
+4. Frontend
 
-Hackathon demo project
+Open frontend/index.html in a browser.
 
-Learning stack integration (API + frontend + DB)
+Usage
 
-Prototype for a larger VPN management system
+Start backend with python server.py.
+
+Open frontend in browser.
+
+Click Connect or Disconnect to test API.
+
+ API Endpoints
+Method	Endpoint	Description
+GET	/	Health check
+POST	/connect	Simulate connect
+POST	/disconnect	Simulate disconnect
+Common Errors & Fixes
+
+Port already in use: Kill the process using 8000 or change port in server.py.
+
+CORS error in browser: Add from fastapi.middleware.cors import CORSMiddleware to backend and enable CORS.
+
+sqlite3 not found: Install SQLite CLI or use Python sqlite3 module directly.
+
+ Roadmap
+
+Add authentication system
+
+Real VPN tunneling integration
+
+Logging dashboard in frontend
+
+Contributing
+
+Fork repo
+
+Create feature branch (git checkout -b feature-name)
+
+Commit changes (git commit -m 'Add feature')
+
+Push branch (git push origin feature-name)
+
+Open Pull Request
+
+📜 License
+
+MIT License. See LICENSE
+.
