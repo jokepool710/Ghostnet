@@ -1,0 +1,21 @@
+from fastapi import FastAPI
+import uvicorn
+
+app = FastAPI(title="VPN Controller API")
+
+@app.get("/")
+def root():
+    return {"message": "VPN project backend is live"}
+
+@app.post("/connect")
+def connect_vpn():
+    # mock connect
+    return {"status": "connected"}
+
+@app.post("/disconnect")
+def disconnect_vpn():
+    # mock disconnect
+    return {"status": "disconnected"}
+
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=True)
