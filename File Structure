@@ -1,0 +1,17 @@
+vpn-project/
+│
+├── backend/
+│   ├── server.py
+│   ├── requirements.txt
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   ├── app.js
+│
+├── db/
+│   ├── schema.sql
+│
+├── .gitignore
+├── README.md
+├── LICENSE
