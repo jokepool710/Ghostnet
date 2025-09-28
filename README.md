@@ -36,20 +36,15 @@ vpn-project/
 ├── README.md
 ├── LICENSE
 
- Setup & Installation
-1. Clone Repo
-git clone https://github.com/<your-username>/<repo-name>.git
-cd vpn-project
-
-2. Backend Setup
+Backend Setup
 cd backend
 pip install -r requirements.txt
 python server.py
 
-3. Database Setup
+Database Setup
 sqlite3 vpn.db < db/schema.sql
 
-4. Frontend
+ Frontend
 
 Open frontend/index.html in a browser.
 
