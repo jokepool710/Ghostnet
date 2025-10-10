@@ -1,141 +1,40 @@
-# VPN Control Panel — FastAPI + Frontend Demo
+# Ghostnet — WireGuard VPN
 
-A lightweight demo VPN control panel built with **FastAPI** and **Vanilla JavaScript**, designed for hackathons, MVPs, and proof-of-concept demos.  
-Instant setup. Minimal dependencies. Complete control.
+This repo now includes a runnable WireGuard VPN setup using docker-compose (linuxserver/wireguard). The container will generate server and peer configs in ./config/wireguard. Do NOT commit private keys or generated config files to the repo.
 
-## Features
+Quick start
 
-- One-click **Connect/Disconnect** simulation  
-- **FastAPI backend** with modular endpoints  
-- **SQLite** database for users and activity logs  
-- **Browser-based frontend** (HTML, CSS, JS)  
-- Minimal, clean, and extendable codebase  
+1. Copy the example env and edit:
 
-## Tech Stack
+   cp .env.example .env
+   # Edit .env and set SERVERURL to your public IP or DNS name and other values
 
-| Layer | Technology |
-|--------|-------------|
-| Backend | Python 3.11, FastAPI, Uvicorn |
-| Frontend | HTML, CSS, Vanilla JavaScript |
-| Database | SQLite |
+2. Create directory for data (optional):
 
+   mkdir -p config/wireguard
 
-## Project Structure
+3. Start the VPN container:
 
+   docker-compose up -d
 
-vpn-project/
-├── backend/          # FastAPI server
-│   ├── server.py
-│   ├── requirements.txt
-│
-├── frontend/         # Web control panel
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│
-├── db/               # Database schema
-│   ├── schema.sql
-│
-├── .gitignore
-├── README.md
-├── LICENSE
+4. Check container logs for peer configuration and QR codes (the container prints peer configs on first run):
 
-``
-## Setup Instructions
+   docker logs -f wireguard
 
-### Backend Setup
-``bash
-cd backend
-pip install -r requirements.txt
-python server.py
-`
+5. Retrieve peer config files from ./config/wireguard/peerX/peerX.conf or use the QR printed in logs to add to your mobile client.
 
- Database Setup
+Notes and security
+- The container requires kernel support for WireGuard (modern Linux). On some hosts you must load the wireguard module.
+- Do NOT store generated config (private keys) in git. Add config/wireguard to .gitignore.
+- If exposing SERVERPORT on cloud providers, open UDP port in firewall/security groups.
 
-`bash
-sqlite3 vpn.db < db/schema.sql
-``
+Troubleshooting
+- If the container fails to start, ensure Docker Engine and docker-compose are installed and the host kernel supports WireGuard.
 
-# Frontend
+Files added
+- docker-compose.yml
+- .env.example
+- LICENSE
+- .gitignore
 
-Open `frontend/index.html` directly in your browser.
-
----
-
-## Usage
-
-1. Start the backend server:
-
-   ```bash
-   python server.py
-   ```
-2. Open the frontend in your browser.
-3. Click **Connect** or **Disconnect** to test the API in action.
-
----
-
-## API Endpoints
-
-| Method | Endpoint      | Description                |
-| ------ | ------------- | -------------------------- |
-| GET    | `/`           | Health check               |
-| POST   | `/connect`    | Simulate VPN connection    |
-| POST   | `/disconnect` | Simulate VPN disconnection |
-
----
-
-## Common Errors & Fixes
-
-**Port already in use:**
-Kill the process using port 8000 or change the port number in `server.py`.
-
-**CORS error in browser:**
-Add:
-
-```python
-from fastapi.middleware.cors import CORSMiddleware
-```
-
-and enable CORS in the FastAPI app.
-
-**sqlite3 not found:**
-Install the SQLite CLI or use Python’s built-in `sqlite3` module.
-
----
-
-## Roadmap
-
-* Add authentication system
-* Real VPN tunneling integration
-* Logging dashboard for frontend
-
----
-
-## Contributing
-
-1. Fork this repository
-2. Create a feature branch
-
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes
-
-   ```bash
-   git commit -m "Add new feature"
-   ```
-4. Push to your fork
-
-   ```bash
-   git push origin feature-name
-   ```
-5. Open a Pull Request
-
----
-
-## License
-
-This project is licensed under the **MIT License**.
-See the [LICENSE](LICENSE) file for details.
-
-```
+If you want, I can also add a helper script to fetch the generated peer config and print it or QR-encode it on the host.
