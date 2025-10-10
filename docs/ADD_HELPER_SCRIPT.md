@@ -1,21 +1,21 @@
 # Add Helper Script + Open / Update the PR
 
-This guide walks you through adding the helper script (`scripts/show-peer.sh`) to your branch and creating or updating the Pull Request (PR).
-No fluff — just clear, working steps.
+This short guide walks through how to add the helper script (`scripts/show-peer.sh`) and open or update the Pull Request.
+It’s written for quick use — no filler, just what you actually need.
 
 ---
 
-## Quick Plan
+## Plan Overview
 
-1. Fetch the `add-starter-scaffold` branch and create a topic branch.
-2. Add `scripts/show-peer.sh` (make it executable) and test it locally.
-3. Commit and push your changes.
-4. Create or update the PR.
-5. Add a short README note and checklist.
+1. Pull the latest `add-starter-scaffold` branch
+2. Add the helper script (`scripts/show-peer.sh`)
+3. Make it executable and test locally
+4. Commit and push your changes
+5. Create or update the PR
 
 ---
 
-## 1. Get the Branch and Update It
+## 1. Pull and Set Up the Branch
 
 ```bash
 git fetch origin
@@ -23,7 +23,7 @@ git checkout add-starter-scaffold
 git pull origin add-starter-scaffold
 ```
 
-Optionally, create a topic branch for this change:
+(Optional) If you want to isolate this change, make a topic branch:
 
 ```bash
 git checkout -b add-helper-script
@@ -70,14 +70,14 @@ fi
 
 ---
 
-## 3. Make It Executable and Test Locally
+## 3. Make It Executable and Test
 
 ```bash
 chmod +x scripts/show-peer.sh
 ./scripts/show-peer.sh 1
 ```
 
-If you see "Peer config not found", start your container first:
+If it says `Peer config not found`, start your container first:
 
 ```bash
 mkdir -p config/wireguard
@@ -85,110 +85,99 @@ docker-compose up -d
 docker logs -f wireguard
 ```
 
-Then test again:
-
-```bash
-./scripts/show-peer.sh 1
-```
+Then re-run the script to confirm it shows the peer config and QR code.
 
 ---
 
 ## 4. Commit and Push
 
-Ensure the executable bit is preserved, then commit and push:
+Make sure the executable bit stays set and commit your change:
 
 ```bash
 git add scripts/show-peer.sh
-git commit -m "scripts: add helper script to display/QR peer configs"
+git commit -m "scripts: add helper script to display peer configs with QR output"
 ```
 
-If you created a topic branch:
+Push it up:
 
 ```bash
 git push -u origin add-helper-script
 ```
 
-If committing directly to `add-starter-scaffold`:
+If you’re pushing directly to the main working branch:
 
 ```bash
 git push origin add-starter-scaffold
 ```
 
-**Note:** If you used the GitHub web editor, executable permissions might not be preserved.
-Fix it locally:
+**Note:** If you added the script via GitHub’s web UI, it may lose its executable permission. Run these locally to fix that:
 
 ```bash
 chmod +x scripts/show-peer.sh
 git add scripts/show-peer.sh
-git commit -m "scripts: add helper script (ensure executable)"
+git commit -m "fix: ensure show-peer.sh is executable"
 git push
 ```
 
 ---
 
-## 5. Create or Update the Pull Request (PR)
+## 5. Create or Update the PR
 
-### Option A – Update Existing PR
+### If a PR Already Exists
 
-If there’s already a PR open from `add-starter-scaffold`, your new commits will automatically appear there once pushed.
-
-Check PRs via CLI:
+Just push your changes — they’ll automatically appear in the open PR.
+Check PRs via the CLI:
 
 ```bash
 gh pr status
 ```
 
----
+### If You’re Creating a New One
 
-### Option B – Create a New PR
-
-Using the GitHub CLI:
+Using the CLI:
 
 ```bash
 gh pr create --base main --head add-helper-script \
   --title "Add helper script to show WireGuard peer configs" \
-  --body "Adds scripts/show-peer.sh to print a peer's config and show a QR (if qrencode is available). Tested: docker-compose up -d, peer1.conf generation, ./scripts/show-peer.sh 1."
+  --body "Adds scripts/show-peer.sh to print a peer config and optionally display a QR code if qrencode is installed."
 ```
 
-Or manually via the web:
+Or manually on GitHub:
 
-1. Push your branch:
-
-   ```bash
-   git push -u origin add-helper-script
-   ```
-2. Go to your repository → **Pull Requests → New Pull Request**
-3. Choose the base and compare branches
-4. Copy-paste the title and body below
+1. Push the branch if you haven’t already:
+   `git push -u origin add-helper-script`
+2. Go to your repo → Pull Requests → **New Pull Request**
+3. Set base to `main` and compare to your branch
+4. Use the title and body below
 
 ---
 
-## Suggested PR Title and Body
+## PR Title and Description
 
 **Title:**
 
 ```
-Add helper script to display WireGuard peer configs (scripts/show-peer.sh)
+Add helper script to display WireGuard peer configs
 ```
 
-**Body:**
+**Description:**
 
 ```
 ### What
-- Adds scripts/show-peer.sh to print a peerN.conf and display a terminal QR code if 'qrencode' is installed.
+Adds scripts/show-peer.sh to print a peer config file and show a QR code in the terminal (if 'qrencode' is available).
 
 ### Why
-- Simplifies fetching and scanning WireGuard peer configs for developers and operators.
-- Eliminates the need to inspect Docker logs to find generated peers.
+Speeds up setup and mobile onboarding — no need to scroll through Docker logs to grab peer configs.
 
 ### Testing
-- docker-compose up -d successfully starts container
-- Peer configs appear under config/wireguard/peer*/peer*.conf
-- ./scripts/show-peer.sh 1 outputs correct config and QR (with qrencode)
+- docker-compose up -d starts correctly
+- Peer configs generated under config/wireguard/peer*/peer*.conf
+- ./scripts/show-peer.sh 1 works as expected
+- QR output verified with qrencode
 
 ### Notes
-- config/wireguard is .gitignored to avoid committing generated configs
-- chmod +x preserved to ensure script runs directly after clone
+- config/wireguard remains .gitignored
+- chmod +x preserved to allow direct execution
 ```
 
 ---
