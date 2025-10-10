@@ -139,9 +139,3 @@ This project is licensed under the **MIT License**.
 See the [LICENSE](LICENSE) file for details.
 
 ```
-
----
-
-You can drop that directly into your repo’s `README.md` — it’ll look clean, organized, and professional.  
-Want me to add a **dark hacker-style banner** or **status badges (build, license, stars)** at the top for extra GitHub appeal?
-```
