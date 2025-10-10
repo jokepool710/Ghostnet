@@ -90,7 +90,3 @@ This avoids hunting through logs and makes mobile client setup easier.
 * `.env.example`
 * `LICENSE`
 * `.gitignore`
-
-
-Do you want me to do that?
-```
