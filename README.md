@@ -1,86 +1,96 @@
-##Ghostnet — WireGuard VPN
+# Ghostnet — WireGuard VPN
 
-This repo now includes a runnable WireGuard VPN setup using docker-compose (linuxserver/wireguard). The container generates server and peer configs in ./config/wireguard. Do NOT commit private keys or generated config files to the repo.
+This repository includes a **runnable WireGuard VPN setup** using `docker-compose` (linuxserver/wireguard). The container automatically generates server and peer configs in `./config/wireguard`.  
 
-Quick Start
+**Important:** Do **not** commit private keys or generated config files to the repo.
 
-Copy the example environment file and edit:
+---
 
+## Quick Start
+
+1. **Copy the example environment file**
+
+```bash
 cp .env.example .env
+````
 
+2. **Edit `.env`** and configure at least the following:
 
-Open .env and set at least:
+* `SERVERURL` → your public IP or DNS name
+* `SERVERPORT` → default is `51820`
+* `PEERS` → number of client configs to generate
+* `PUID` / `PGID` → usually `1000/1000`
+* `PEERDNS` → e.g., `1.1.1.1`
 
-SERVERURL → your public IP or DNS name
+3. **Create the config directory** (if not existing)
 
-SERVERPORT → default is 51820
-
-PEERS → number of client configs to generate
-
-PUID / PGID → usually 1000/1000
-
-PEERDNS → e.g., 1.1.1.1
-
-(Optional) Create the directory for configs:
-
+```bash
 mkdir -p config/wireguard
+```
 
+4. **Start the VPN container**
 
-Start the VPN container:
-
+```bash
 docker-compose up -d
+```
 
+5. **Check container logs** — peer configs and QR codes are printed on first run:
 
-Check container logs — it prints peer configs and QR codes on the first run:
-
+```bash
 docker logs -f wireguard
+```
 
+6. **Retrieve peer configs**
 
-Use the peer config files from ./config/wireguard/peerX/peerX.conf or scan the QR codes in the logs to add them to your mobile client.
+* Files are available in `./config/wireguard/peerX/peerX.conf`
+* Or scan the QR code printed in logs to add peers to your mobile client
 
-Helper Script (optional but recommended)
+---
 
-To make fetching peer configs easier, there’s a helper script at scripts/show-peer.sh. It will:
+## Helper Script
 
-Print the peer config in your terminal
+To simplify fetching peer configs, there’s a helper script: `scripts/show-peer.sh`. It prints the peer config in your terminal and optionally shows a QR code (requires `qrencode`).
 
-Display a QR code (requires qrencode)
+**Usage:**
 
-Example:
-
-# show peer 1
+```bash
+# Show peer 1
 ./scripts/show-peer.sh 1
+```
 
+**Make it executable:**
 
-Make sure it’s executable:
-
+```bash
 chmod +x scripts/show-peer.sh
+```
+
+This avoids hunting through logs and makes mobile client setup easier.
+
+---
+
+## Notes & Security
+
+* Host must support WireGuard kernel module (modern Linux kernels usually do)
+* Do **not** commit generated configs or private keys (`config/wireguard` is `.gitignore`d)
+* If exposing `SERVERPORT` on cloud providers, ensure the UDP port is open in your firewall/security group
+* For full traffic routing, enable IPv4 forwarding on the host and set up NAT/masquerading
+
+---
+
+## Troubleshooting
+
+* **Container fails to start:** Ensure Docker Engine and `docker-compose` are installed, and your kernel supports WireGuard
+* **Peer configs not generated:** Check container logs and folder permissions
+
+---
+
+## Files Added
+
+* `docker-compose.yml`
+* `.env.example`
+* `LICENSE`
+* `.gitignore`
 
 
-This avoids hunting through logs and lets you quickly import peers on your devices.
-
-Notes & Security
-
-Host must support WireGuard kernel module (modern Linux kernels usually do).
-
-Do not commit generated configs or private keys. config/wireguard is already in .gitignore.
-
-If exposing SERVERPORT on cloud providers, make sure the UDP port is open in your firewall or security groups.
-
-For full traffic routing, enable IP forwarding on the host and set up NAT/masquerading.
-
-Troubleshooting
-
-Container fails to start → make sure Docker Engine + docker-compose are installed and your kernel supports WireGuard.
-
-Peer configs not generated → check container logs and permissions.
-
-Files Added
-
-docker-compose.yml
-
-.env.example
-
-LICENSE
-
-.gitignore
+Do you want me to do that?
+```
